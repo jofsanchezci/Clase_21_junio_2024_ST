@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monolithic Architecture</title>
+    <script>
+        async function addItem() {
+            const item = document.getElementById('item').value;
+            const response = await fetch('/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ item: item })
+            });
+            const result = await response.json();
+            alert(result.status);
+            getItems();
+        }
+
+        async function getItems() {
+            const response = await fetch('/items');
+            const data = await response.json();
+            document.getElementById('items').innerText = JSON.stringify(data.items, null, 2);
+        }
+    </script>
+</head>
+<body onload="getItems()">
+    <h1>Monolithic Architecture</h1>
+    <input type="text" id="item" placeholder="Add Item">
+    <button onclick="addItem()">Add Item</button>
+    <h2>Items</h2>
+    <pre id="items"></pre>
+</body>
+</html>

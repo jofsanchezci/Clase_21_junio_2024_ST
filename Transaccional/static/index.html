@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transactional Microservice</title>
+    <script>
+        async function getBalance() {
+            const accountId = document.getElementById('accountId').value;
+            const response = await fetch(`/balance/${accountId}`);
+            const data = await response.json();
+            document.getElementById('balance').innerText = JSON.stringify(data, null, 2);
+        }
+
+        async function transferMoney() {
+            const source = document.getElementById('sourceAccount').value;
+            const destination = document.getElementById('destinationAccount').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            
+            const response = await fetch('/transfer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ source: source, destination: destination, amount: amount })
+            });
+            const result = await response.json();
+            alert(result.status);
+            getBalance(); // Actualizar el balance después de la transferencia
+        }
+    </script>
+</head>
+<body>
+    <h1>Transactional Microservice</h1>
+    <h2>Check Balance</h2>
+    <input type="text" id="accountId" placeholder="Account ID">
+    <button onclick="getBalance()">Get Balance</button>
+    <pre id="balance"></pre>
+    
+    <h2>Transfer Money</h2>
+    <input type="text" id="sourceAccount" placeholder="Source Account ID">
+    <input type="text" id="destinationAccount" placeholder="Destination Account ID">
+    <input type="number" id="amount" placeholder="Amount">
+    <button onclick="transferMoney()">Transfer</button>
+</body>
+</html>

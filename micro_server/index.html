@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Microservice Example</title>
+    <script>
+        async function getTasks() {
+            const response = await fetch('/tasks');
+            const data = await response.json();
+            document.getElementById('tasks').innerText = JSON.stringify(data.tasks, null, 2);
+        }
+
+        async function addTask() {
+            const task = document.getElementById('task').value;
+            const response = await fetch('/tasks', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ task: task })
+            });
+            const result = await response.json();
+            alert(result.status);
+            getTasks();
+        }
+
+        async function deleteTask() {
+            const taskId = document.getElementById('taskId').value;
+            const response = await fetch('/tasks/' + taskId, {
+                method: 'DELETE'
+            });
+            const result = await response.json();
+            alert(result.status);
+            getTasks();
+        }
+    </script>
+</head>
+<body onload="getTasks()">
+    <h1>Microservice Example</h1>
+    <input type="text" id="task" placeholder="Add Task">
+    <button onclick="addTask()">Add Task</button>
+    <br><br>
+    <input type="number" id="taskId" placeholder="Task ID to Delete">
+    <button onclick="deleteTask()">Delete Task</button>
+    <h2>Tasks</h2>
+    <pre id="tasks"></pre>
+</body>
+</html>

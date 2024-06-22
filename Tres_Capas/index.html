@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Three-Tier Architecture</title>
+    <script>
+        async function addItem() {
+            const item = document.getElementById('item').value;
+            const response = await fetch('/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ item: item })
+            });
+            const result = await response.json();
+            alert(result.status);
+        }
+
+        async function getItems() {
+            const response = await fetch('/items');
+            const data = await response.json();
+            document.getElementById('items').innerText = JSON.stringify(data.items);
+        }
+    </script>
+</head>
+<body>
+    <h1>Three-Tier Architecture</h1>
+    <input type="text" id="item" placeholder="Add Item">
+    <button onclick="addItem()">Add Item</button>
+    <button onclick="getItems()">Get Items</button>
+    <p id="items"></p>
+</body>
+</html>
